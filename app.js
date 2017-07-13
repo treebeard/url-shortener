@@ -13,12 +13,14 @@ var Url = require('./models/url');
 // create a connection to our MongoDB
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
-app.use(express.static(path.join(__dirname, '/static')));
+app.use(express.static(path.join(__dirname, 'static')));
 
 //handles JSON bodies
 app.use(bodyParser.json());
 //handlesURL encoded bodies
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.listen(process.env.PORT || 8456);
 
 app.get('/', function(req, res){
 	//route to serve up the homepage (index.html)
@@ -77,8 +79,4 @@ app.get('/:encoded_id', function(req, res){
           res.redirect(config.webhost);
         }
     });
-});
-
-var server = app.listen(process.env.PORT || 8456, function(){
-	console.log('Server listening on port 8456');
 });

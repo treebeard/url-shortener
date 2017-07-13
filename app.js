@@ -13,7 +13,7 @@ var Url = require('./models/url');
 // create a connection to our MongoDB
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, '/static')));
 
 //handles JSON bodies
 app.use(bodyParser.json());

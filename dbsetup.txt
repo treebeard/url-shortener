@@ -1,0 +1,2 @@
+use url_shortener
+db.counters.insert({ _id: 'url_count', seq: 1 })

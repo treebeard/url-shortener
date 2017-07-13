@@ -6,7 +6,7 @@ config.db = {};
 config.webhost = 'http://localhost:8456/';
 
 // your MongoDB host and database name
-config.db.host = 'heroku_njgdl6z4:gn3rjdf16m6kcmhroho7aio5a@ds157712.mlab.com:57712';
+config.db.host = 'heroku_njgdl6z4:Dodgeviper1!@ds157712.mlab.com:57712';
 config.db.name = 'heroku_njgdl6z4';
 
 module.exports = config;

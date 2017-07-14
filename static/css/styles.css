@@ -66,12 +66,13 @@ body {
 #link {
   display: none;
   padding-top: 15px;
-}
-
-#link a{
   color: #F89406;
   font-size: 1.5em;
   margin-right: 20px;
+}
+
+#link a{
+
 }
 
 @media (min-width: 768px) {

@@ -11,10 +11,10 @@ $('.btn-shorten').on('click', function(){
 
   //check if url starts with http or https, if not, append http
   var protocolpattern = /^((http|https):\/\/)/;
-  var pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
+  var pattern = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
   var inputurl = $.trim($('#url-field').val());
 
-  /**if (!inputurl){
+  if (!inputurl){
       var resultHTML = '<span>No URL found</span>';
       $('#link').html(resultHTML);
       $('#link').hide().fadeIn('slow');
@@ -44,7 +44,8 @@ $('.btn-shorten').on('click', function(){
           $('#link').hide().fadeIn('slow');
       }
     });
-  }**/
+  }
+  /**
   if (!inputurl){
       var resultHTML = '<span>No URL found</span>';
       $('#link').html(resultHTML);
@@ -76,4 +77,5 @@ $('.btn-shorten').on('click', function(){
       }
     });
   }
+  **/
 });

@@ -36,7 +36,7 @@ $('.btn-shorten').on('click', function(){
       data: {url: inputurl},
       success: function(data){
           // display the shortened URL to the user that is returned by the server
-          var resultHTML = '<a class="result" href="' + data.shortUrl + '">'
+          var resultHTML = '<a class="result" target="_blank" href="' + data.shortUrl + '">'
               + data.shortUrl + '</a>';
           $('#link').html(resultHTML);
           $('#link').hide().fadeIn('slow');

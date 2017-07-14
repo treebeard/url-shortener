@@ -75,7 +75,7 @@ app.get('/:encoded_id', function(req, res){
     // check if url already exists in database
     Url.findOne({_id: id}, function (err, doc){
         if (doc) {
-          alert(str(id));
+          alert(String(id));
           // found an entry in the DB, redirect the user to their destination
           res.redirect(doc.long_url);
         } 

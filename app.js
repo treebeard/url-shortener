@@ -11,6 +11,7 @@ var app = express();
 var Url = require('./models/url');
 
 // create a connection to our MongoDB
+//variable set using 'heroku congig:set MONGOLAB_URI='
 var mongourl = process.env.MONGOLAB_URI;
 
 //mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);

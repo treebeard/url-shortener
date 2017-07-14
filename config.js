@@ -6,7 +6,7 @@ config.db = {};
 config.webhost = 'http://localhost:8456/';
 
 // your MongoDB host and database name
-config.db.host = 'heroku_njgdl6z4:Dodgeviper1!@ds157712.mlab.com:57712';
-config.db.name = 'heroku_njgdl6z4';
+config.db.host = 'localhost';
+config.db.name = 'url_shortener';
 
 module.exports = config;

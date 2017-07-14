@@ -11,7 +11,11 @@ var app = express();
 var Url = require('./models/url');
 
 // create a connection to our MongoDB
-mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
+var mongourl = process.env.MONGOLAB_URI;
+
+//mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
+mongoose.connect(mongourl);
+
 
 app.use(express.static(path.join(__dirname, 'static')));
 

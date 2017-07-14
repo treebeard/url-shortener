@@ -67,6 +67,10 @@ app.post('/api/shorten', function(req, res){
     });
 });
 
+app.get('/favicon.ico', function(req, res) {
+    res.status(204);
+});
+
 app.get('/:encoded_id', function(req, res){
 	// route to redirect the visitor to their original URL given the short URL
     var base58Id = req.params.encoded_id;

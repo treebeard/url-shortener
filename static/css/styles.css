@@ -68,7 +68,7 @@ body {
   padding-top: 15px;
 }
 
-#link, #link a{
+#link a, #link span {
   color: #F89406;
   font-size: 1.5em;
   margin-right: 20px;

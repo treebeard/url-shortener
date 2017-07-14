@@ -1,3 +1,9 @@
+$("#url-field").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".btn-shorten").click();
+    }
+});
+
 // add an event listener to the shorten button for when the user clicks it
 $('.btn-shorten').on('click', function(){
 

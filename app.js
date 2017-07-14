@@ -83,7 +83,6 @@ app.get('/:encoded_id', function(req, res){
           console.log(id);
           // found an entry in the DB, redirect the user to their destination
           res.redirect(doc.long_url);
-          //res.redirect("http://www.google.com");
         } 
         else {
           console.log(base58Id);

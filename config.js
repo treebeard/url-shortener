@@ -1,8 +1,8 @@
 var config = {};
 
 config.db = {};
-// the URL shortening host - shortened URLs will be this + base58 ID
-// i.e.: http://localhost:8456/3Ys
+// the URL shortening host - shortened URLs will be this + hasids ID
+// i.e.: http://abbrev.io/3Y
 config.webhost = 'http://abbrev.io/';
 
 // your MongoDB host and database name

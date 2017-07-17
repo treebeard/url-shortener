@@ -3,7 +3,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var config = require('./config');
-var base58 = require('./base58.js');
+var hashids = require('./hashids.js');
 
 var app = express();
 
@@ -15,7 +15,7 @@ var Url = require('./models/url');
 var mongourl = process.env.MONGOLAB_URI;
 
 //mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
-mongoose.connect(mongourl);
+//mongoose.connect(mongourl);
 
 
 app.use(express.static(path.join(__dirname, 'static')));
@@ -40,8 +40,8 @@ app.post('/api/shorten', function(req, res){
     // check if url already exists in database
     Url.findOne({long_url: longUrl}, function (err, doc){
         if (doc){
-          // base58 encode the unique _id of that document and construct the short URL
-          shortUrl = config.webhost + base58.encode(doc._id);
+          // hashids encode the unique _id of that document and construct the short URL
+          shortUrl = config.webhost + hashids.encode(doc._id);
 
           // since the document exists, we return it without creating a new entry
           res.send({'shortUrl': shortUrl});
@@ -60,7 +60,7 @@ app.post('/api/shorten', function(req, res){
             }
 
             // construct the short URL
-            shortUrl = config.webhost + base58.encode(newUrl._id);
+            shortUrl = config.webhost + hashids.encode(newUrl._id);
 
             res.send({'shortUrl': shortUrl});
           });
@@ -74,19 +74,19 @@ app.get('/favicon.ico', function(req, res) {
 
 app.get('/:encoded_id', function(req, res){
 	// route to redirect the visitor to their original URL given the short URL
-    var base58Id = req.params.encoded_id;
-    var id = base58.decode(base58Id);
+    var hashedId = req.params.encoded_id;
+    var id = hashids.decode(hashedId);
 
     // check if url already exists in database
     Url.findOne({_id: id}, function (err, doc){
         if (doc) {
-          console.log(base58Id);
+          console.log(hashedId);
           console.log(id);
           // found an entry in the DB, redirect the user to their destination
           res.redirect(doc.long_url);
         } 
         else {
-          console.log(base58Id);
+          console.log(hashedId);
           console.log(id);
           // nothing found, take 'em home
           res.redirect(config.webhost);

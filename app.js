@@ -14,8 +14,12 @@ var Url = require('./models/url');
 //variable set using 'heroku config:set MONGOLAB_URI='
 var mongourl = process.env.MONGOLAB_URI;
 
-//mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
-mongoose.connect(mongourl);
+if (process.env.NODE_ENV === 'production'){
+  mongoose.connect(mongourl);
+}
+else{
+  mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
+}
 
 
 app.use(express.static(path.join(__dirname, 'static')));

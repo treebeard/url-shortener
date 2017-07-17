@@ -4,7 +4,8 @@
   "description": "A NodeJS, Express, and MongoDB URL Shortening Service",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "echo \"Starting server\" && NODE_ENV=production node app.js",
+    "local": "echo \"Starting server\" && NODE_ENV=local node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vineet Velagandula",

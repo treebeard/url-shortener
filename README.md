@@ -3,7 +3,7 @@ A Node, Express, and MongoDB URL Shortener which uses [Hashids](http://hashids.o
 
 To run locally:
 ```
-Run Mongo Database, then run commands:
+Run MongoDB, then run commands:
 use url_shortener
 db.counters.insert({ _id: 'url_count', seq: 1 })
 
@@ -16,5 +16,6 @@ To run in production:
 ```
 Setup MongoDB and get MongoDB URI
 Set Node environment variable MONGOLAB_URI to the MongoDB URI
+
 npm start
 ```

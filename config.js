@@ -2,11 +2,8 @@ var config = {};
 
 config.db = {};
 // the URL shortening host - shortened URLs will be this + hasids ID
-// i.e.: http://abbrev.io/3Y
-config.webhost = 'http://abbrev.io/';
+config.webhost = process.env.DEFAULT_URL;
 
-// your MongoDB host and database name
-config.db.host = 'localhost';
 config.db.name = 'url_shortener';
-
+config.db.connection_string = process.env.MONGO_CONNECTION_STRING
 module.exports = config;

@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  url_shortener_get:
+    image: quay.io/urbit/url-shortener:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/code
+    build: .
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      MONGO_DB_NAME: url_shortener
+      MONGO_CONNECTION_STRING: mongodb://mongo
+      DEFAULT_URL: http://localhost/
+    command: sh -c "npm run start_get"
+  url_shortener_post:
+    image: quay.io/urbit/url-shortener:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/code
+    build: .
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      MONGO_DB_NAME: url_shortener
+      MONGO_CONNECTION_STRING: mongodb://mongo
+      DEFAULT_URL: http://localhost/
+    command: sh -c "npm run start_post"
+  # MongoDB
+  mongo:
+    image: mvertes/alpine-mongo:3.2.10-3
+    ports:
+      - "27017:27017"
+  mongo-express:
+    image: mongo-express:latest
+    links:
+      - mongo
+    ports:
+      - "8090:8081"

@@ -1,0 +1,145 @@
+# Install dependencies, build & run tests
+build:
+  application:
+    image: quay.io/urbit/node-workspace:latest
+    pull: true
+    environment:
+    - APP_ENV=prod
+    - APP_DEBUG=true
+    commands:
+    - yarn
+    - yarn test
+  
+# Notify Slack
+notify:
+  slack:
+    webhook_url: $$SLACK_WEBHOOK_URL
+    channel: ci
+    when:
+      event: pull_request
+    username: drone
+    template: >
+      {{#success build.status}}
+        <{{ repo.link_url }}|{{ repo.name }}> build <{{ system.link_url }}/{{ repo.full_name }}/{{ build.number }}|#{{ build.number }}>: PR <{{ build.link_url }}|{{ build.title }}> succeeded.
+      {{else}}
+        <{{ repo.link_url }}|{{ repo.name }}> build <{{ system.link_url }}/{{ repo.full_name }}/{{ build.number }}|#{{ build.number }}>: PR <{{ build.link_url }}|{{ build.title }}> failed.
+      {{/success}}
+  slack:
+    webhook_url: $$SLACK_WEBHOOK_URL
+    channel: ci
+    when:
+      event: push
+      branch: master
+    username: drone
+    template: >
+      {{#success build.status}}
+        <{{ repo.link_url }}|{{ repo.name }}> build <{{ system.link_url }}/{{ repo.full_name }}/{{ build.number }}|#{{ build.number }}>: Merge <{{ build.link_url }}|{{ build.message }}> succeeded.
+      {{else}}
+        <{{ repo.link_url }}|{{ repo.name }}> build <{{ system.link_url }}/{{ repo.full_name }}/{{ build.number }}|#{{ build.number }}>: Merge <{{ build.link_url }}|{{ build.message }}> failed.
+      {{/success}}
+
+# Publish to Quay.io
+publish:
+  # Unstable
+  docker:
+    registry: quay.io
+    username: $$QUAY_USERNAME
+    password: $$QUAY_PASSWORD
+    email: $$QUAY_EMAIL
+    repo: urbit/url-shortener
+    tag:
+    - latest
+    - $$COMMIT
+    when:
+      event: push
+      branch: master
+  # RC + Stable
+  docker:
+    registry: quay.io
+    username: $$QUAY_USERNAME
+    password: $$QUAY_PASSWORD
+    email: $$QUAY_EMAIL
+    repo: urbit/url-shortener
+    tag:
+    - $$TAG
+    - $$COMMIT
+    when:
+      event: tag
+      branch: refs/tags/*
+
+# Deploy
+deploy:
+  # Stage
+  kubernetes-helm:
+    image: quay.io/urbit/drone-kubernetes-helm:v0.1.0-k8s-v1.7.5-helm-v2.6.2
+    auth_config:
+      username: $$QUAY_USERNAME
+      password: $$QUAY_PASSWORD
+      email: $$QUAY_EMAIL
+    when:
+      event: tag
+      branch:
+      - refs/tags/v*[0-9].*[0-9].*[0-9]-rc        # Plain -rc
+      - refs/tags/v*[0-9].*[0-9].*[0-9]-rc.*[0-9] # -rc.N's
+    config:
+      kubeconfig: $$KUBE_CONFIG
+      credentials:
+        certificate-authority: $$KUBE_CA
+        client-certificate: $$KUBE_CLIENT_CERT
+        client-key: $$KUBE_CLIENT_KEY
+    commands:
+    - repo:
+        command: add
+        args:
+        - urbit
+        - http://charts.urb-it.io
+    - get:
+        command: values
+        release: stage-url-shortener
+        flags:
+        - all: true
+        - output: ./values-stage.yaml
+    - upgrade:
+        chart: urbit/url-shortener
+        release: stage-url-shortener
+        flags:
+        - namespace: stage
+        - values: ./values-stage.yaml
+        - set: urlShortener.image.tag=$$TAG
+  # Prod
+  kubernetes-helm:
+    image: quay.io/urbit/drone-kubernetes-helm:v0.1.0-k8s-v1.7.5-helm-v2.6.2
+    auth_config:
+      username: $$QUAY_USERNAME
+      password: $$QUAY_PASSWORD
+      email: $$QUAY_EMAIL
+    when:
+      event: tag
+      branch:
+      - refs/tags/v*[0-9].*[0-9].[0-9]      # Because of limitations with Unix Glob Patterns (born in 1969) we can't just
+      - refs/tags/v*[0-9].*[0-9].[0-9][0-9] # do `refs/tags/v*[0-9].*[0-9].*[0-9]` because that would also include -rc.N's
+    config:
+      kubeconfig: $$KUBE_CONFIG
+      credentials:
+        certificate-authority: $$KUBE_CA
+        client-certificate: $$KUBE_CLIENT_CERT
+        client-key: $$KUBE_CLIENT_KEY
+    commands:
+    - repo:
+        command: add
+        args:
+        - urbit
+        - http://charts.urb-it.io
+    - get:
+        command: values
+        release: prod-url-shortener
+        flags:
+        - all: true
+        - output: ./values-prod.yaml
+    - upgrade:
+        chart: urbit/url-shortener
+        release: prod-url-shortener
+        flags:
+        - namespace: prod
+        - values: ./values-prod.yaml
+        - set: urlShortener.image.tag=$$TAG

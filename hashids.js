@@ -1,5 +1,5 @@
 var Hashids = require('hashids');
-var hashids = new Hashids();
+var hashids = new Hashids(process.env.SALT);
 
 function encode(num){
   return hashids.encode(num);

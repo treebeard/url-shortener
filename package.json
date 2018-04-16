@@ -4,14 +4,15 @@
   "description": "A NodeJS, Express, and MongoDB URL Shortening Service",
   "main": "app.js",
   "scripts": {
-    "start": "echo \"Starting server\" && NODE_ENV=production node app.js",
-    "local": "echo \"Starting server\" && NODE_ENV=local node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start_post" : "echo \"Starting server\" && node post.js",
+    "start_get": "echo \"Starting server\" && node get.js",
+    "test": "echo \"Warning: no test specified\""
   },
   "author": "Vineet Velagandula",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "dotenv": "^5.0.1",
     "express": "^4.15.3",
     "hashids": "^1.1.1",
     "mongoose": "^4.11.1"
